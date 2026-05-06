@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>黑狗本人管理訂單</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+    }
+     body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('711.jpg');
+      background-size: cover;
+      background-position: center center;
+      opacity: 0.15;
+      z-index: -1;
+      filter: brightness(0.8);
+    }
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: #f7f9fc;
+      color: #333;
+      padding: 2rem;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    p {
+      color: #7f8c8d;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    input[type="password"] {
+      width: 250px;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border: 1.5px solid #bdc3c7;
+      border-radius: 6px;
+      transition: border-color 0.3s;
+      display: block;
+      margin: 0 auto 1rem auto;
+    }
+    input[type="password"]:focus {
+      outline: none;
+      border-color: #3498db;
+      box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+    }
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 0.7rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      margin: 0 auto;
+      box-shadow: 0 3px 6px rgba(52, 152, 219, 0.4);
+    }
+    button:hover {
+      background-color: #2980b9;
+      box-shadow: 0 6px 12px rgba(41, 128, 185, 0.6);
+    }
+    #adminPanel {
+      max-width: 1500px;
+      width: 100%;
+      margin-top: 2.5rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      padding: 1.5rem 2rem;
+      display: none;
+    }
+    #adminPanel.active {
+      display: block;
+    }
+    h2 {
+      margin-top: 0;
+      color: #34495e;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+      letter-spacing: 1px;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      font-size: 1rem;
+      color: #2c3e50;
+    }
+    thead tr {
+      background-color: #3498db;
+      color: white;
+      text-align: left;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    thead th {
+      padding: 12px 20px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+    tbody tr {
+      background: #ecf0f1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      border-radius: 8px;
+      transition: background-color 0.25s ease;
+    }
+    tbody tr:hover {
+      background-color: #d6e9ff;
+    }
+    tbody td {
+      padding: 12px 20px;
+      vertical-align: middle;
+      border: none;
+    }
+    tbody td:last-child {
+      text-align: center;
+    }
+    tbody button {
+      background-color: #27ae60;
+      padding: 0.4rem 1rem;
+      font-size: 0.9rem;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4);
+      font-weight: 600;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+    tbody button:hover {
+      background-color: #1e8449;
+      box-shadow: 0 4px 12px rgba(30, 132, 73, 0.6);
+    }
+    /* 已完成的訂單 */
+    .done-label {
+      color: #7f8c8d;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    /* 統一按鈕樣式 */
+.action-btn {
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  border-radius: 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  margin: 2px 4px;
+  vertical-align: middle;
+}
+
+/* 完成按鈕綠色 */
+tbody .action-btn.done-btn {
+  background-color: #27ae60;
+  color: white;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+tbody .action-btn.done-btn:hover {
+  background-color: #1e8449;
+  box-shadow: 0 4px 12px rgba(30, 132, 73, 0.6);
+}
+
+/* 刪除按鈕紅色 */
+tbody .action-btn.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+tbody .action-btn.delete-btn:hover {
+  background-color: #c0392b;
+  box-shadow: 0 4px 12px rgba(192, 57, 43, 0.6);
+}
+
+  </style>
+</head>
+<body>
+  <h1>你確定你是黑狗本人嗎</h1>
+  <p>請輸入密碼：</p>
+  <input type="password" id="adminPwd" placeholder="管理密碼" />
+  <button onclick="verifyAdmin()">確定登入</button>
+
+  <div id="adminPanel">
+    <h2>所有訂單紀錄</h2>
+    <table id="orderTable" aria-label="所有訂單紀錄">
+      <thead>
+        <tr>
+          <th>名字</th>
+          <th>訂購內容</th>
+          <th>時間</th>
+          <th>數量</th>
+          <th>總價</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="orderTableBody">
+        <!-- 訂單資料會用 JS 插入 -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+  const ADMIN_PASSWORD = "dodog387";
+
+  function verifyAdmin() {
+    const pwd = document.getElementById("adminPwd").value;
+    if (pwd === ADMIN_PASSWORD) {
+      document.getElementById("adminPanel").style.display = "block";
+      loadOrders();
+    } else {
+      alert("滾 你根本不是小狗");
+    }
+  }
+
+  function loadOrders() {
+    fetch("https://nudosys.onrender.com/orders")
+      .then((res) => res.json())
+      .then((orders) => {
+        const tableBody = document.querySelector("#orderTable tbody");
+        tableBody.innerHTML = "";
+
+        if (orders.length === 0) {
+          tableBody.innerHTML = `
+            <tr>
+              <td colspan="6" style="text-align:center; color:#777;">目前沒有訂單</td>
+            </tr>
+          `;
+          return;
+        }
+
+        orders.forEach((order) => {
+          const doneText = order.done
+            ? `<span class="done-label">已完成</span>`
+            : `<button class="action-btn done-btn" onclick="markAsDone('${order.id}')">完成</button>`;
+
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${order.name}</td>
+            <td>${order.brand} - ${order.flavor}</td>
+            <td>${new Date(order.time).toLocaleString()}</td>
+            <td>${order.quantity}</td>
+            <td>${order.tprice}</td>
+            <td>
+              ${doneText}
+              <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">刪除</button>
+            </td>
+            
+          `;
+          tableBody.appendChild(row);
+        });
+      })
+      .catch(() => alert("無法取得訂單資料"));
+  }
+
+  function markAsDone(id) {
+    fetch(`https://nudosys.onrender.com/done/${id}`, {
+      method: "PATCH",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert(data.message);
+        loadOrders();
+      })
+      .catch(() => alert("無法連接伺服器"));
+  }
+
+  function deleteOrder(id) {
+    if (!confirm("確定要刪除此訂單嗎？")) return;
+    fetch(`https://nudosys.onrender.com/order/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          alert("刪除成功");
+          loadOrders();
+        } else {
+          alert("刪除失敗");
+        }
+      })
+      .catch(() => alert("無法連接伺服器"));
+  }
+</script>
+
+</body>
+</html>

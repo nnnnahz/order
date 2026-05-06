@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>黑狗宅急便</title>
+  <style>
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('711.jpg');
+      background-size: cover;
+      background-position: center center;
+      opacity: 0.15;
+      z-index: -1;
+      filter: brightness(0.8);
+    }
+    body {
+      margin: 0;
+      padding: 2rem;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", sans-serif;
+      background-color: #f4f6f8;
+      color: #2c3e50;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .card {
+      background:rgba(255,255,255,0.25);
+      padding: 2.5rem 2.5rem 3rem;
+      border-radius: 1.2rem;
+      box-shadow: 0 16px 32px rgb(0,0,0,0.12);
+      backdrop-filter: blur(3px);           
+      -webkit-backdrop-filter: blur(12px);  
+      max-width: 800px;
+      width: 100%;
+      transition: transform 0.3s ease,box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    }
+    h2 {
+      margin: 0 0 1.8rem 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: 0.08em;
+      color: #34495e;
+      text-align: center;
+      user-select: none;
+    }
+    label {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-top: 1.3rem;
+      display: block;
+      user-select: none;
+      color: #34495e;
+    }
+
+   
+    input[type="password"] {
+      width: 200px;
+      padding: 6px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    select, input[type="password"] {
+      width: 100%;
+      padding: 0.55rem 1rem;
+      margin-top: 0.4rem;
+      border: 1.6px solid #bdc3c7;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+      font-weight: 500;
+      color: #34495e;
+      user-select: text;
+    }
+    select:focus, input[type="password"]:focus {
+      border-color: #3498db;
+      outline: none;
+      box-shadow: 0 0 6px rgba(52, 152, 219, 0.35);
+    }
+    button {
+      margin-top: 0px;
+      width: 100%;
+      background-color: #3498db;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 0.8rem;
+      border: none;
+      border-radius: 0.7rem;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgb(52 152 219 / 0.4);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+    }
+    button:hover {
+      background-color: #2980b9;
+      box-shadow: 0 7px 22px rgb(41 128 185 / 0.6);
+    }
+    button:active {
+      transform: scale(0.97);
+    }
+    .submit-btn {
+      margin-top: 1rem;
+      background-color: #2ecc71;
+      box-shadow: 0 5px 15px rgb(46 204 113 / 0.4);
+    }
+    .submit-btn:hover {
+      background-color: #27ae60;
+      box-shadow: 0 7px 22px rgb(39 174 96 / 0.6);
+    }
+    #historyOrders {
+      margin-top: 2rem;
+      max-width: 800px;
+      overflow-x: auto;
+      border-radius: 1rem;
+      box-shadow: 0 12px 28px rgb(0 0 0 / 0.1);
+      background-color: #fff;
+      padding: 1.2rem 1rem;
+      display: none; 
+      user-select: none;
+    }
+    #historyOrders h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #34495e;
+      text-align: center;
+    }
+    #historyOrders table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 12px;
+      font-size: 1rem;
+      color: #34495e;
+      user-select: text;
+    }
+    #historyOrders thead tr {
+      background-color: #3498db;
+      color: white;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      border-radius: 0.6rem;
+    }
+    #historyOrders thead th {
+      padding: 12px 15px;
+      text-align: left;
+    }
+    #historyOrders tbody tr {
+      background: #ecf0f1;
+      border-radius: 0.8rem;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.07);
+      transition: background-color 0.2s ease;
+    }
+    #historyOrders tbody tr:hover {
+      background-color: #d6e9ff;
+    }
+    #historyOrders tbody td {
+      padding: 12px 15px;
+      vertical-align: middle;
+    }
+    #historyOrders tbody td:nth-child(4) {
+      font-weight: 600;
+      color: #27ae60;
+    }
+    #historyOrders tbody td:nth-child(4):not(:contains("已完成")) {
+      color: #e74c3c;
+    }
+
+    .loginbutt{
+    margin-top: 30px;
+    }
+
+   .input-field {
+    width: 100%;
+    padding: 0.55rem 1rem;
+    margin-top: 0.4rem;
+    border: 1.6px solid #bdc3c7;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    font-weight: 500;
+    color: #34495e;
+    user-select: text;
+    box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>黑狗宅急便</h2>
+
+    <div id="login">
+      <label for="name">你是誰?：</label>
+      <select id="name" class="input-field" aria-label="會員名稱">
+        <option value="教授">歡迎教授!!密碼123</option>
+        <option value="Josie">Josie至尊會員</option>
+        <option value="詹越至">詹越至</option>
+        <option value="陳育靜">陳育靜</option>
+        <option value="吳柏樺">吳柏樺</option>
+        <option value="周容">周容</option>
+        <option value="林彧">林彧</option>
+        <option value="李寬灝">李寬灝</option>
+        <option value="卓承鋒">卓承鋒</option>
+        <option value="景博翰">景博翰</option>
+        <option value="王宇釩">王宇釩</option>
+        <option value="王宥人">王宥人</option>
+        <option value="蔡也">蔡也</option>
+        <option value="王宥鈞">王宥鈞</option>
+        <option value="許瑀宸">許瑀宸</option>
+        <option value="陳律妤">陳律妤</option>
+        <option value="陳逸穎">陳逸穎</option>
+        <option value="廖晨亦">廖晨亦</option>
+        <option value="簡鉦原">簡鉦原</option>
+        <option value="陳品寰">陳品寰</option>
+        <option value="侯程鈞">侯程鈞</option>
+        <option value="陳靖宜">陳靖宜</option>
+        <option value="黃百吉">黃百吉</option>
+      </select>
+
+      <label for="password">密碼：</label>
+      <input type="password" id="password" aria-label="密碼" class="input-field" autocomplete="current-password" />
+
+      <button class="loginbutt" onclick="login()">登入</button>
+    </div>
+
+    <div id="orderForm" aria-live="polite" aria-atomic="true" style="display:none;">
+      <label for="brand">選擇品牌：</label>
+      <select id="brand" onchange="updateFlavors()" aria-label="選擇品牌">
+        <option value="">請選擇</option>
+        <option value="合味道">合味道</option>
+        <option value="來一客">來一客</option>
+        <option value="農心">農心</option>
+        <option value="不倒翁">不倒翁</option>
+        <option value="滿漢大餐">滿漢大餐</option>
+        <option value="素飄香">素飄香</option>
+        <option value="台酒">台酒</option>
+        <option value="味味一品">味味一品</option>
+        <option value="阿Q">阿Q</option>
+        <option value="味味a">味味a</option>
+        <option value="維力">維力</option>
+        <option value="一風堂">一風堂</option>
+        <option value="統一">統一</option>
+        <option value="大乾麵">大乾麵</option>
+        <option value="手打麵">手打麵</option>
+        <option value="一度讚">一度讚</option>
+        <option value="炒泡麵">炒泡麵</option>
+        <option value="plus">plus</option>
+        <option value="營多">營多</option>
+      </select>
+
+      <label for="flavor">選擇口味：</label>
+      <select id="flavor" aria-label="選擇口味">
+        <option value="">請先選擇品牌</option>
+      </select>
+      
+      <label for="quantity">數量：</label>
+      <input type="number" id="quantity" class="input-field" min="1" value="1" />
+      <br><br>
+
+      <button onclick="submitOrder()">送出訂單</button>
+      <button onclick="loadUserOrders()" class="submit-btn">查看歷史訂單</button>
+
+      <div id="historyOrders" aria-live="polite" aria-atomic="true">
+        <h3>你的歷史訂單</h3>
+        <table border="0" cellpadding="5" cellspacing="0" style="width:100%; max-width:800px;">
+          <thead>
+            <tr>
+              <th>品牌</th>
+              <th>口味</th>
+              <th>數量</th>
+              <th>時間</th>
+              <th>狀態</th>
+              <th>刪除</th>
+            </tr>
+          </thead>
+          <tbody id="historyOrdersBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="status" aria-live="polite" style="margin-top:1rem; text-align:center;"></div>
+  </div>
+
+  <script>
+    const users = {
+      "教授": "123",
+      "Josie": "321",
+      "詹越至": "0210",
+      "陳育靜": "0007",
+      "吳柏樺": "uber",
+      "周容": "0402",
+      "李寬灝": "0123",
+      "卓承鋒": "lucas",
+      "王宇釩": "evan",
+      "王宥人": "0904",
+      "王宥鈞": "randy",
+      "蔡也": "0227",
+      "許瑀宸": "0810",
+      "陳逸穎": "0102",
+      "陳律妤": "allison",
+      "廖晨亦": "5666",
+      "簡鉦原": "5334221234555",
+      "景博翰": "apple",
+      "陳品寰": "999999",
+      "侯程鈞": "kaiden",
+      "陳靖宜": "1107",
+      "林彧": "nchustar",
+      "黃百吉": "210065"
+    };
+
+    let currentUser = null;
+
+    function login() {
+      const name = document.getElementById("name").value;
+      const pwd = document.getElementById("password").value;
+      if (users[name] === pwd) {
+        currentUser = name;
+        document.getElementById("login").style.display = "none";
+        document.getElementById("orderForm").style.display = "block";
+        document.getElementById("status").innerText = `Yoooo!，${name}`;
+      } else {
+        alert("密碼錯誤");
+      }
+    }
+
+    const brandFlavorMap = {
+      "合味道": ["海鮮35", "辣味海鮮35"],
+      "來一客": ["鮮蝦魚板25", "牛肉蔬菜25", "辣味香菇35", "泡菜25", "京燉肉骨25"],
+      "農心": ["香辣海鮮烏龍麵(包)50","海鮮烏龍麵(包)50","泰式酸辣(包)75","泰式酸辣(碗)90","辣白醬(包)65","辛拉麵(包)50","香菇麵(碗)50","白菜麵(碗)50"],
+      "不倒翁": ["金拉麵(原味)50","金拉麵(辣味)50","起司拉麵(包)50","起司拉麵(碗)50"],
+      "滿漢大餐": ["珍味牛肉麵60", "蔥燒牛肉麵60", "麻辣牛肉麵60", "金牛肉麵90", "熗牛肉麵90", "蔥燒豬肉麵60"],
+      "素飄香": ["麻辣燙40", "原味40"],
+      "台酒": ["花雕酸菜牛肉麵60", "麻油雞麵60", "花雕雞麵60"],
+      "味味一品": ["紅燒牛肉麵60", "原汁珍味爌肉麵60", "川味牛肉麵60", "珍味牛肉麵60", "麻辣臭豆腐麵60", "牛筋麵60"],
+      "阿Q": ["紅椒牛肉35", "生猛海鮮35", "蒜香珍肉35", "雞汁排骨35", "韓式泡菜35"],
+      "味味a": ["排骨雞湯麵（袋）90", "排骨雞乾麵 (袋)90", "排骨雞麵（小碗）25", "冬菜鴨肉粉絲 一兆"],
+      "維力": ["炸醬麵(袋）90", "炸醬麵（小碗）25", "炸醬麵 （大碗）35", "辣炸醬麵（大碗）35"],
+      "統一": ["肉燥麵25", "肉燥米粉25", "肉骨茶麵25", "鮮蝦麵25","蔥燒牛麵25"],
+      "大乾麵": ["蔥燒牛肉35", "地獄辣椒35", "紅油擔擔35"],
+      "一風堂": ["豚骨湯麵65","豚骨湯麵(辣味)65"],
+      "手打麵": ["蔥燒牛肉麵35", "和風豚骨麵35"],
+      "一度讚": ["紅燒牛肉麵55", "爌肉麵55", "老甕牛肉麵55","蒜味豚骨麵60","番茄牛肉麵60"],
+      "炒泡麵": ["香辣炸醬40", "爆香三杯40","川味椒麻40"],
+      "plus": ["黑蒜豚骨湯麵40", "紅燒牛肉湯麵40"],
+      "營多": ["炒泡麵35"]
+    };
+
+
+
+    function login() {
+      const name = document.getElementById("name").value;
+      const pwd = document.getElementById("password").value;
+      if (users[name] === pwd) {
+        currentUser = name;
+        document.getElementById("login").style.display = "none";
+        document.getElementById("orderForm").style.display = "block";
+        document.getElementById("status").innerText = `歡迎會員，${name}`;
+      } else {
+        alert("密碼錯誤");
+      }
+    }
+
+    
+    function updateFlavors() {
+      const brand = document.getElementById("brand").value;
+      const flavorSelect = document.getElementById("flavor");
+      flavorSelect.innerHTML = "";
+
+      if (!brandFlavorMap[brand]) {
+        flavorSelect.innerHTML = '<option value="">請先選擇品牌</option>';
+        return;
+      }
+
+      brandFlavorMap[brand].forEach(flavor => {
+        const opt = document.createElement("option");
+        opt.value = flavor;
+        opt.textContent = flavor;
+        flavorSelect.appendChild(opt);
+      });
+    }
+
+
+    function deleteOrder(id) {
+    if (!confirm("你確定要刪除這筆訂單嗎？")) return;
+
+    fetch(`https://nudosys.onrender.com/order/${id}`, {
+    method: 'DELETE'
+    })
+    .then(res => res.json())
+    .then(data => {
+    if (data.success) {
+      alert('刪除成功！');
+      loadUserOrders();
+    } else {
+      alert('刪除失敗');
+    }
+    })
+    .catch(() => alert('無法刪除資料'));
+    }
+
+
+    function extractPriceFromFlavor(flavor) {
+    const match = flavor.match(/(\d+)$/); // 從 flavor 結尾抓價格數字
+    return match ? parseInt(match[1], 10) : 0;
+    }
+
+    
+    function submitOrder() {
+      const brand = document.getElementById("brand").value;
+      const flavor = document.getElementById("flavor").value;
+      const quantity = parseInt(document.getElementById("quantity").value, 10);
+      console.log("quantity 是：", quantity, typeof quantity);
+      
+      if (!brand || !flavor) {
+        alert("請選擇品牌和口味！");
+        return;
+      }
+
+      const unitPrice = extractPriceFromFlavor(flavor);
+      const tprice = unitPrice * quantity;
+      console.log("tprice是",tprice,typeof tprice);
+
+
+      const order = {
+        name: currentUser,
+        brand,
+        quantity,
+        tprice,
+        flavor,
+        time: new Date().toISOString()
+        
+      };
+
+      fetch('https://nudosys.onrender.com/order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(order)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('訂單送出成功！');
+        } else {
+          alert('訂單送出失敗');
+        }
+      })
+      .catch(() => alert('無法連接伺服器'));
+    }
+
+    function loadUserOrders() {
+      if (!currentUser) {
+        alert("請先登入");
+        return;
+      }
+
+      fetch('https://nudosys.onrender.com/orders')
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.getElementById('historyOrdersBody');
+        tbody.innerHTML = '';
+
+        const userOrders = data.filter(order => order.name === currentUser);
+
+        if (userOrders.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">沒有歷史訂單</td></tr>`;
+        }
+        else {
+          userOrders.forEach(order => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+          <td>${order.brand}</td>
+          <td>${order.flavor}</td>
+          <td>${order.quantity}</td>
+          <td>${new Date(order.time).toLocaleString()}</td>
+          <td style="color:${order.done ? '#27ae60' : '#e74c3c'}; font-weight:700;">
+          ${order.done ? '已完成' : '未完成'}
+          </td>
+          <td>
+          <button onclick="deleteOrder('${order.id}')" style="padding:4px 8px; font-size:0.9rem; background-color:#e74c3c; color:#fff; border:none; border-radius:6px; cursor:pointer;">
+          刪除
+          </button>
+          </td>
+          `;
+          tbody.appendChild(tr);
+          });
+
+        }
+
+        document.getElementById('historyOrders').style.display = 'block';
+      })
+      .catch(() => alert('無法取得歷史訂單'));
+    }
+  </script>
+</body>
+</html>
+
+
+
