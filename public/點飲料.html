@@ -248,7 +248,7 @@
 
 
       <label for="ice">冰塊</label>
-      <select id="sugar" aria-label="選擇你的甜度" disabled>
+      <select id="ice" aria-label="選擇你的冰塊" disabled>
         <option value="" >先選要喝什麼</option>
         <option value="正常冰" >正常冰</option>
         <option value="少冰" >少冰</option>
@@ -367,13 +367,19 @@
     function updateItem() {
       const itemSelect = document.getElementById("item");
       const addsSelect = document.getElementById("adds");
+      const sugarSelect = document.getElementById("sugar");
+      const iceSelect = document.getElementById("ice");     
 
       if (itemSelect.value === "") {
         addsSelect.disabled = true;
         addsSelect.selectedIndex = 0;
+        sugarSelect.disabled = true; 
+        iceSelect.disabled = true;  
         addsSelect.options[0].text = "先選要喝什麼";
       } else {
         addsSelect.disabled = false;
+        sugarSelect.disabled = false;
+        iceSelect.disabled = false;
         addsSelect.options[0].text = "不要加料 (+0元)";
       }
     }
@@ -428,7 +434,7 @@
     function deleteOrder(id) {
       if (!confirm("你確定要刪除嗎？")) return;
 
-      fetch(`https://nudosys.onrender.com/order/${id}`, {
+      fetch(`https://orderyyt.onrender.com/order/${id}`, {
         method: 'DELETE'
       })
       .then(res => res.json())
@@ -462,24 +468,22 @@
         } else {
           userOrders.forEach(order => {
             const tr = document.createElement('tr');
-            tr.innerHTML = `
+           tr.innerHTML = `
             <td>${order.item}</td>
-            <td>${order.adds}</td>
+            <td>${order.sugar || ''}</td>
+            <td>${order.ice || ''}</td>
+            <td>${order.adds || ''}</td>
             <td>${order.quantity}</td>
-            <td>${order.ice}</td>
-            <td>${order.sugar}</td>
             <td style="color:#e67e22; font-weight:bold;">${order.tprice} 元</td>
             <td>${order.note || ''}</td>
             <td>${new Date(order.time).toLocaleString()}</td>
             <td style="color:${order.done ? '#27ae60' : '#e74c3c'}; font-weight:700;">
-            ${order.done ? '已經付錢' : '還沒付錢'}
+              ${order.done ? '已經付錢' : '還沒付錢'}
             </td>
             <td>
-            <button onclick="deleteOrder('${order.id}')" style="padding:4px 8px; font-size:0.9rem; background-color:#e74c3c; color:#fff; border:none; border-radius:6px; cursor:pointer; margin-top:0;">
-            刪除
-            </button>
+              <button onclick="deleteOrder('${order.id}')" style="padding:4px 8px; font-size:0.9rem; background-color:#e74c3c; color:#fff; border:none; border-radius:6px; cursor:pointer; margin-top:0;">刪除</button>
             </td>
-            `;
+          `;
             tbody.appendChild(tr);
           });
         }
