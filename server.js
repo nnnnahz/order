@@ -13,7 +13,7 @@ app.use(express.static('public'));
 
 // Supabase 初始化
 const supabaseUrl = 'https://hqybkwbokqogfkmqzzgg.supabase.co';
-const supabaseKey = 'sb_secret_UOUyRMUzMsEgvhhLeLnHcg_b_SlVtQp';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxeWJrd2Jva3FvZ2ZrbXF6emdnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODA2NzkxOCwiZXhwIjoyMDkzNjQzOTE4fQ.1tKsMSb1R3iFP3gXrKRALnvugwSjiUb8dB2MgOO3w3I';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // /order  新增訂單
