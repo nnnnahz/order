@@ -7,7 +7,13 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+const corsOptions = {
+  origin: 'https://orderyyt.onrender.com',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
