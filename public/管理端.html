@@ -261,15 +261,17 @@ tbody .action-btn.delete-btn:hover {
           const row = document.createElement("tr");
           row.innerHTML = `
             <td>${order.name}</td>
-            <td>${order.item} - ${order.sugar}</td> - ${order.ice}</td>
+            <td>${order.item} ${order.adds && order.adds !== '不加料' ? '(加'+order.adds+')' : ''}</td>
+            <td>${order.sugar || ''}</td>
+            <td>${order.ice || ''}</td>
             <td>${new Date(order.time).toLocaleString()}</td>
             <td>${order.quantity}</td>
             <td>${order.tprice}</td>
+            <td>${order.note || ''}</td>
             <td>
               ${doneText}
               <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">刪除</button>
             </td>
-            
           `;
           tableBody.appendChild(row);
         });
