@@ -195,6 +195,20 @@ tbody .action-btn.delete-btn:hover {
 }
 
   </style>
+<head>
+  <meta charset="UTF-8" />
+  <title>詹本人管理訂單</title>
+  <style>
+    /* CSS 省略，沿用你原本的即可 */
+    body { font-family: "Noto Sans TC", sans-serif; background: #f7f9fc; padding: 2rem; display: flex; flex-direction: column; align-items: center;}
+    #adminPanel { display: none; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 1200px;}
+    table { width: 100%; border-collapse: collapse; margin-top: 20px;}
+    th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left;}
+    button { padding: 10px 20px; cursor: pointer; }
+    .action-btn { padding: 5px 10px; margin: 2px; color: white; border: none; border-radius: 5px; }
+    .done-btn { background: #27ae60; }
+    .delete-btn { background: #e74c3c; }
+  </style>
 </head>
 <body>
   <h1>你確定你是詹本人嗎</h1>
@@ -204,23 +218,14 @@ tbody .action-btn.delete-btn:hover {
 
   <div id="adminPanel">
     <h2>所有訂單紀錄</h2>
-    <table id="orderTable" aria-label="所有訂單紀錄">
+    <table>
       <thead>
         <tr>
-          <th>名字</th>
-          <th>飲料</th>
-          <th>甜度</th>
-          <th>冰塊</th>
-          <th>時間</th>
-          <th>數量</th>
-          <th>總價</th>
-          <th>備註</th>
-          <th>操作</th>
+          <th>名字</th><th>飲料</th><th>甜度</th><th>冰塊</th><th>時間</th>
+          <th>數量</th><th>總價</th><th>備註</th><th>操作</th>
         </tr>
       </thead>
-      <tbody id="orderTableBody">
-
-      </tbody>
+      <tbody id="orderTableBody"></tbody>
     </table>
   </div>
 
@@ -228,86 +233,65 @@ tbody .action-btn.delete-btn:hover {
   const ADMIN_PASSWORD = "0210";
 
   function verifyAdmin() {
-    const pwd = document.getElementById("adminPwd").value;
-    if (pwd === ADMIN_PASSWORD) {
+    if (document.getElementById("adminPwd").value === ADMIN_PASSWORD) {
       document.getElementById("adminPanel").style.display = "block";
       loadOrders();
-    } else {
-      alert("滾 你根本不是詹");
-    }
+    } else alert("滾 你根本不是詹");
   }
 
   function loadOrders() {
-    fetch("https://orderyyt.onrender.com/orders")
+    // 【重點修改】使用相對路徑 /orders
+    fetch("/orders")
       .then((res) => res.json())
       .then((orders) => {
-        const tableBody = document.querySelector("#orderTable tbody");
-        tableBody.innerHTML = "";
-
+        const tbody = document.getElementById("orderTableBody");
+        tbody.innerHTML = "";
         if (orders.length === 0) {
-          tableBody.innerHTML = `
-            <tr>
-              <td colspan="6" style="text-align:center; color:#777;">目前沒有訂單</td>
-            </tr>
-          `;
+          tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;">目前沒有訂單</td></tr>`;
           return;
         }
 
         orders.forEach((order) => {
-          const doneText = order.done
-            ? `<span class="done-label">已付錢</span>`
+          const doneText = order.done 
+            ? `<span style="color:#7f8c8d; font-weight:bold;">已付錢</span>` 
             : `<button class="action-btn done-btn" onclick="markAsDone('${order.id}')">付錢</button>`;
+          
+          const addsText = order.adds && order.adds !== "不加料" ? `(+${order.adds})` : "";
 
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td>${order.name}</td>
-            <td>${order.item} ${order.adds && order.adds !== '不加料' ? '(加'+order.adds+')' : ''}</td>
-            <td>${order.sugar || ''}</td>
-            <td>${order.ice || ''}</td>
-            <td>${new Date(order.time).toLocaleString()}</td>
-            <td>${order.quantity}</td>
-            <td>${order.tprice}</td>
-            <td>${order.note || ''}</td>
-            <td>
-              ${doneText}
-              <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">刪除</button>
-            </td>
+          tbody.innerHTML += `
+            <tr>
+              <td>${order.name}</td>
+              <td>${order.item} ${addsText}</td>
+              <td>${order.sugar || '未填'}</td>
+              <td>${order.ice || '未填'}</td>
+              <td>${new Date(order.time).toLocaleString()}</td>
+              <td>${order.quantity}</td>
+              <td>${order.tprice}</td>
+              <td>${order.note || ''}</td>
+              <td>
+                ${doneText}
+                <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">刪除</button>
+              </td>
+            </tr>
           `;
-          tableBody.appendChild(row);
         });
-      })
-      .catch(() => alert("無法取得訂單資料"));
+      });
   }
 
   function markAsDone(id) {
-    fetch(`https://nudosys.onrender.com/done/${id}`, {
-      method: "PATCH",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        alert(data.message);
-        loadOrders();
-      })
-      .catch(() => alert("無法連接伺服器"));
+    // 【重點修改】使用相對路徑 /done/id
+    fetch(`/done/${id}`, { method: "PATCH" })
+      .then(res => res.json())
+      .then(() => loadOrders());
   }
 
   function deleteOrder(id) {
     if (!confirm("確定要刪除此訂單嗎？")) return;
-    fetch(`https://orderyyt.onrender.com/order/${id}`, {
-      method: "DELETE",
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert("刪除成功");
-          loadOrders();
-        } else {
-          alert("刪除失敗");
-        }
-      })
-      .catch(() => alert("無法連接伺服器"));
+    // 【重點修改】使用相對路徑 /order/id
+    fetch(`/order/${id}`, { method: "DELETE" })
+      .then(res => res.json())
+      .then(() => loadOrders());
   }
-</script>
-
+  </script>
 </body>
 </html>
