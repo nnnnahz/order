@@ -6,11 +6,11 @@ const { createClient } = require('@supabase/supabase-js');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors()); // 在同一個網址下，這樣寫就足夠了
+app.use(cors()); 
 app.use(bodyParser.json());
-app.use(express.static('public')); // 重要：這行讓你的網頁可以被讀取
+app.use(express.static('public')); // 讓前端 HTML 可以被讀取
 
-// Supabase 初始化 (這裡不變)
+// Supabase 初始化 
 const supabaseUrl = 'https://hqybkwbokqogfkmqzzgg.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhxeWJrd2Jva3FvZ2ZrbXF6emdnIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3ODA2NzkxOCwiZXhwIjoyMDkzNjQzOTE4fQ.1tKsMSb1R3iFP3gXrKRALnvugwSjiUb8dB2MgOO3w3I';
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -19,7 +19,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 app.post('/order', async (req, res) => {
   const { name, item, adds, sugar, ice, quantity, tprice, note, time } = req.body;
   const { data, error } = await supabase
-    .from('nudosys') // 這是你的資料庫表單名稱，不用改
+    .from('orderyyt') // 🔴 已經改成 orderyyt
     .insert([{ name, item, adds, sugar, ice, quantity, tprice, note, time }]);
 
   if (error) {
@@ -32,7 +32,7 @@ app.post('/order', async (req, res) => {
 //  /orders - 取得訂單
 app.get('/orders', async (req, res) => {
   const { data, error } = await supabase
-    .from('nudosys')  
+    .from('orderyyt') // 🔴 已經改成 orderyyt
     .select('*')
     .order('time', { ascending: false });
 
@@ -44,7 +44,7 @@ app.get('/orders', async (req, res) => {
 app.patch('/done/:id', async (req, res) => {
   const { id } = req.params;
   const { data, error } = await supabase
-    .from('nudosys')
+    .from('orderyyt') 
     .update({ done: true })
     .eq('id', id);
 
@@ -56,7 +56,7 @@ app.patch('/done/:id', async (req, res) => {
 app.delete('/order/:id', async (req, res) => {
   const { id } = req.params;
   const { error } = await supabase
-    .from('nudosys')
+    .from('orderyyt') 
     .delete()
     .eq('id', id);
 
