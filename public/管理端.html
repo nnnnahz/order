@@ -281,7 +281,7 @@ tbody .action-btn.delete-btn:hover {
 
   function markAsDone(id) {
     // 【重點修改】使用相對路徑 /done/id
-    fetch(`/done/${id}`, { method: "PATCH" })
+    fetch(`/paid/${id}`, { method: "PATCH" })
       .then(res => res.json())
       .then(() => loadOrders());
   }
