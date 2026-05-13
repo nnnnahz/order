@@ -508,7 +508,7 @@
                 <td>${order.note || ''}</td>
                 <td>${new Date(order.time).toLocaleString()}</td>
                 <td style="color:${order.paid ? '#27ae60' : '#e74c3c'}; font-weight:700;">
-                  ${order.paid ? '已經付錢' : '還沒付錢'}
+                  ${order.done ? '已經付錢' : '還沒付錢'}
                 </td>
                 <td><button onclick="deleteOrder('${order.id}')" style="background:#e74c3c; padding:5px;">刪除</button></td>
               </tr>`;
