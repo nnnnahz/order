@@ -17,7 +17,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 
 // /order  新增訂單
 app.post('/order', async (req, res) => {
-  const { name, item, adds, sugar, ice, quantity, tprice, note, time } = req.body;
+  const { name, item, adds, sugar, ice, quantity, tprice, note, time, paid } = req.body;
   const { data, error } = await supabase
     .from('orderyyt') // 🔴 已經改成 orderyyt
     .insert([{ name, item, adds, sugar, ice, quantity, tprice, note, time }]);
