@@ -199,7 +199,6 @@ tbody .action-btn.delete-btn:hover {
   <meta charset="UTF-8" />
   <title>詹本人管理訂單</title>
   <style>
-    /* CSS 省略，沿用你原本的即可 */
     body { font-family: "Noto Sans TC", sans-serif; background: #f7f9fc; padding: 2rem; display: flex; flex-direction: column; align-items: center;}
     #adminPanel { display: none; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); width: 100%; max-width: 1200px;}
     table { width: 100%; border-collapse: collapse; margin-top: 20px;}
@@ -268,7 +267,7 @@ tbody .action-btn.delete-btn:hover {
               <td>${order.quantity}</td>
               <td>${order.tprice}</td>
               <td>${order.note || ''}</td>
-              <td>${order.paid}</td>
+              <td>${order.done}</td>
               <td>
                 ${doneText}
                 <button class="action-btn delete-btn" onclick="deleteOrder('${order.id}')">刪除</button>
@@ -281,7 +280,7 @@ tbody .action-btn.delete-btn:hover {
 
   function markAsDone(id) {
     // 【重點修改】使用相對路徑 /done/id
-    fetch(`/paid/${id}`, { method: "PATCH" })
+    fetch(`/done/${id}`, { method: "PATCH" })
       .then(res => res.json())
       .then(() => loadOrders());
   }
